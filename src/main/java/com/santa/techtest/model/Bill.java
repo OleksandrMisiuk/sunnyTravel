@@ -1,21 +1,20 @@
 package com.santa.techtest.model;
 
 public class Bill {
-   private String transfer;
-   private String insurance;
-   private String visafee;
-   private String packagePrice;
-   private String mealPrice;
-   private String roomPrice;
-   private String giftCertificate;
-   private String sumDiscount;
-   private String dayDiscount;
-   private String tourFee;
+   private float transfer;
+   private float insurance;
+   private float visafee;
+   private float packagePrice;
+   private float mealPrice;
+   private float roomPrice;
+   private float giftCertificate;
+   private float sumDiscount;
+   private float dayDiscount;
+   private float tourFee;
    private float total;
 
-    public Bill(String transfer, String insurance, String visafee, String packagePrice,
-                String mealPrice, String roomPrice, String giftCertificate, String sumDiscount, String dayDiscount,
-                String tourFee, float total) {
+    public Bill(float transfer, float insurance, float visafee, float packagePrice, float mealPrice, float roomPrice,
+                float giftCertificate, float sumDiscount, float dayDiscount, float tourFee, float total) {
         this.transfer = transfer;
         this.insurance = insurance;
         this.visafee = visafee;
@@ -32,76 +31,84 @@ public class Bill {
     public Bill() {
     }
 
-    public String getTransfer() {
+    public float getTransfer() {
         return transfer;
     }
 
-    public void setTransfer(String transfer) {
+    public void setTransfer(float transfer) {
         this.transfer = transfer;
     }
 
-    public String getInsurance() {
+    public float getInsurance() {
         return insurance;
     }
 
-    public void setInsurance(String insurance) {
+    public void setInsurance(float insurance) {
         this.insurance = insurance;
     }
 
-    public String getVisafee() {
+    public float getVisafee() {
         return visafee;
     }
 
-    public void setVisafee(String visafee) {
+    public void setVisafee(float visafee) {
         this.visafee = visafee;
     }
 
-    public String getPackagePrice() {
+    public float getPackagePrice() {
         return packagePrice;
     }
 
-    public void setPackagePrice(String packagePrice) {
+    public void setPackagePrice(float packagePrice) {
         this.packagePrice = packagePrice;
     }
 
-    public String getMealPrice() {
+    public float getMealPrice() {
         return mealPrice;
     }
 
-    public void setMealPrice(String mealPrice) {
+    public void setMealPrice(float mealPrice) {
         this.mealPrice = mealPrice;
     }
 
-    public String getRoomPrice() {
+    public float getRoomPrice() {
         return roomPrice;
     }
 
-    public void setRoomPrice(String roomPrice) {
+    public void setRoomPrice(float roomPrice) {
         this.roomPrice = roomPrice;
     }
 
-    public String getGiftCertificate() {
+    public float getGiftCertificate() {
         return giftCertificate;
     }
 
-    public void setGiftCertificate(String giftCertificate) {
+    public void setGiftCertificate(float giftCertificate) {
         this.giftCertificate = giftCertificate;
     }
 
-    public String getSumDiscount() {
+    public float getSumDiscount() {
         return sumDiscount;
     }
 
-    public void setSumDiscount(String sumDiscount) {
+    public void setSumDiscount(float sumDiscount) {
         this.sumDiscount = sumDiscount;
     }
 
-    public String getDayDiscount() {
+    public float getDayDiscount() {
         return dayDiscount;
     }
 
-    public void setDayDiscount(String dayDiscount) {
+    public void setDayDiscount(float dayDiscount) {
         this.dayDiscount = dayDiscount;
+    }
+
+    public float getTourFee() {
+        return tourFee;
+    }
+
+    public void setTourFee(float tourFee) {
+        this.tourFee = tourFee;
     }
 
     public float getTotal() {
@@ -112,27 +119,19 @@ public class Bill {
         this.total = total;
     }
 
-    public String getTourFee() {
-        return tourFee;
-    }
-
-    public void setTourFee(String tourFee) {
-        this.tourFee = tourFee;
-    }
-
     @Override
     public String toString() {
         return "Bill{" +
-                ", transfer='" + transfer + '\'' +
-                ", insurance='" + insurance + '\'' +
-                ", visafee='" + visafee + '\'' +
-                ", packagePrice='" + packagePrice + '\'' +
-                ", mealPrice='" + mealPrice + '\'' +
-                ", roomPrice='" + roomPrice + '\'' +
-                ", giftCertificate='" + giftCertificate + '\'' +
-                ", sumDiscount='" + sumDiscount + '\'' +
-                ", dayDiscount='" + dayDiscount + '\'' +
-                ", tourFee='" + tourFee + '\'' +
+                "transfer=" + transfer +
+                ", insurance=" + insurance +
+                ", visafee=" + visafee +
+                ", packagePrice=" + packagePrice +
+                ", mealPrice=" + mealPrice +
+                ", roomPrice=" + roomPrice +
+                ", giftCertificate=" + giftCertificate +
+                ", sumDiscount=" + sumDiscount +
+                ", dayDiscount=" + dayDiscount +
+                ", tourFee=" + tourFee +
                 ", total=" + total +
                 '}';
     }

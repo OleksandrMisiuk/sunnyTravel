@@ -33,7 +33,7 @@ public class MainController {
     }
 
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping(value = "/order", produces = MediaType.APPLICATION_JSON_VALUE,
+    @PostMapping(value = "/preOrder", produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
     public Bill orderPackage(@RequestBody BookDto bookDto){
         return counterService.getBill(bookDto);

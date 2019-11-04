@@ -41,7 +41,7 @@ public class CounterServiceImpl implements CounterService{
         Bill bill = new Bill();
         Counter counter = counterDao.getBill(bookDto);
 
-        countPackagePrice(counter.getPackagePriceType(), counter.getPackagePrice(), bill);
+        countPackagePrice(counter.getPackagePriceType(), counter.getPackagePrice(), counter.getNumberOfPeople(), bill);
         countTourFee(counter.getPackagePriceType(), counter.getPackagePrice(), bill);
         countMealPrice(counter.getHotelPriceType(), counter.getMealPrice(), counter.getNumberOfPeople(), bill);
         countRoomPrice(counter.getHotelPriceType(), counter.getRoomPrice(), bill);
@@ -54,17 +54,18 @@ public class CounterServiceImpl implements CounterService{
         return bill;
     }
 
-    public void countPackagePrice(String packagePriceType, float packagePrice, Bill bill){
+    public void countPackagePrice(String packagePriceType, float packagePrice, int peopleNum, Bill bill){
         float tempCount = exchanger(packagePriceType, packagePrice);
         logger.info("Package price: " + packagePrice + " " + packagePriceType);
-        bill.setPackagePrice("Package price = " + tempCount);
+        tempCount *= peopleNum;
+        bill.setPackagePrice(tempCount);
         bill.setTotal(bill.getTotal() + tempCount);
         logger.info("Package price: " + tempCount + " UAH added bill");
     }
 
     public void countTourFee(String packagePriceType, float packagePrice, Bill bill){
         float tempCount = exchanger(packagePriceType, packagePrice);
-        bill.setTourFee("Tour fee = " + tempCount*0.05);
+        bill.setTourFee(tempCount*0.05f);
         bill.setTotal(bill.getTotal() + tempCount*0.05f);
         logger.info("Tour fee: " + tempCount + "*0.05 = " + tempCount*0.05 + "UAH added to bill");
     }
@@ -73,7 +74,7 @@ public class CounterServiceImpl implements CounterService{
         float tempCount = exchanger(hotelPriceType, mealPrice);
         logger.info("Meal price: " + mealPrice + " " + hotelPriceType);
         tempCount *= people;
-        bill.setMealPrice("Meal price for " + people + " people = " + tempCount);
+        bill.setMealPrice(tempCount);
         bill.setTotal(bill.getTotal() + tempCount);
         logger.info("Meal price for " + people + " people = " + tempCount + "UAH added to bill");
     }
@@ -81,7 +82,7 @@ public class CounterServiceImpl implements CounterService{
     public void countRoomPrice(String hotelPriceType, float roomPrice, Bill bill){
         float tempCount = exchanger(hotelPriceType, roomPrice);
         logger.info("Room price: " + roomPrice + " " + hotelPriceType);
-        bill.setRoomPrice("Room price = " + tempCount);
+        bill.setRoomPrice(tempCount);
         bill.setTotal(bill.getTotal() + tempCount);
         logger.info("Room price = " + tempCount + " UAH added to bill");
     }
@@ -89,7 +90,7 @@ public class CounterServiceImpl implements CounterService{
     public void countVisaFee(String countryPriceType, float visafee, Bill bill){
         float tempCount = exchanger(countryPriceType, visafee);
         logger.info("Visa fee: " + visafee + " " + countryPriceType);
-        bill.setVisafee("Visa fee = " + tempCount);
+        bill.setVisafee(tempCount);
         bill.setTotal(bill.getTotal() + tempCount);
         logger.info("Visa fee: " + tempCount + " UAH added to bill");
     }
@@ -98,11 +99,11 @@ public class CounterServiceImpl implements CounterService{
         if(!isTransfer) {
             float tempCount = exchanger("USD", transfer);
             logger.info("Transfer: " + transfer + " USD");
-            bill.setTransfer("Transfer costs " + tempCount);
+            bill.setTransfer(tempCount);
             bill.setTotal(bill.getTotal() + tempCount);
             logger.info("Transfer: " + tempCount + " UAH added to bill");
         } else {
-            bill.setTransfer("Transfer included to package price");
+            bill.setTransfer(0f);
             logger.info("Transfer included to package price");
         }
     }
@@ -113,29 +114,29 @@ public class CounterServiceImpl implements CounterService{
                 if(duration>=12) {
                     float ins = insuranceTwelve*1.1F;
                     logger.info("Insurance not EU: " + insuranceTwelve + " UAH +10% more 12 days");
-                    bill.setInsurance("Insurance cost " + ins);
+                    bill.setInsurance(ins);
                     bill.setTotal(bill.getTotal() + ins);
                     logger.info("Insurance not EU: " + ins + " UAH more 12 days added to bill");
                 } else {
                     float ins = insurance*1.1F;
                     logger.info("Insurance not EU: " + insuranceTwelve + " UAH +10% less 12 days");
-                    bill.setInsurance("Insurance cost " + ins);
+                    bill.setInsurance(ins);
                     bill.setTotal(bill.getTotal() + ins);
                     logger.info("Insurance not EU: " + ins + " UAH less 12 days to bill");
                 }
             } else {
                 if(duration>=12) {
-                    bill.setInsurance("Insurance cost " + insuranceTwelve);
+                    bill.setInsurance(insuranceTwelve);
                     bill.setTotal(bill.getTotal() + insuranceTwelve);
                     logger.info("Insurance EU: " + insuranceTwelve + " UAH more 12 days added to bill");
                 } else {
-                    bill.setInsurance("Insurance cost " + insurance);
+                    bill.setInsurance(insurance);
                     bill.setTotal(bill.getTotal() + insurance);
                     logger.info("Insurance EU: " + insurance + " UAH less 12 days to bill");
                 }
             }
         } else {
-            bill.setInsurance("Insurance included to package price");
+            bill.setInsurance(0f);
             logger.info("Insurance included to package price");
         }
     }
@@ -145,37 +146,37 @@ public class CounterServiceImpl implements CounterService{
         boolean flag = true;
         if(bill.getTotal()>=tempCount){
             tempCount = exchanger("EUR", 60);
-            bill.setSumDiscount(tempCount + " discount due to price of package");
+            bill.setSumDiscount(tempCount);
             bill.setTotal(bill.getTotal()-tempCount);
             flag = false;
         } else {
-            bill.setSumDiscount("You don't have discount");
+            bill.setSumDiscount(0f);
         }
         tempCount = exchanger("EUR", 500);
         if(bill.getTotal()>= tempCount&&flag){
             tempCount = exchanger("EUR", 10);
-            bill.setSumDiscount(tempCount + " discount due to price of package");
+            bill.setSumDiscount(tempCount);
             bill.setTotal(bill.getTotal()-tempCount);
         } else {
-            bill.setSumDiscount("You don't have discount");
+            bill.setSumDiscount(0f);
         }
     }
 
     public void dayDiscount(LocalDate dateDepart, Bill bill){
         if(dateDepart.getDayOfMonth()==independenceDay.getDayOfMonth()&&
                 dateDepart.getMonthValue()==independenceDay.getMonthValue()){
-            bill.setDayDiscount("10% discount due to Independence Day of Ukraine ");
+            bill.setDayDiscount(bill.getTotal()*0.10f);
             bill.setTotal(bill.getTotal()*0.90F);
         }else if(dateDepart.getDayOfMonth()==tourismDay.getDayOfMonth()&&
                 dateDepart.getMonthValue()==tourismDay.getMonthValue()){
-            bill.setDayDiscount("10% discount due to Day Tourism of Ukraine");
+            bill.setDayDiscount(bill.getTotal()*0.10f);
             bill.setTotal(bill.getTotal()*0.90F);
-        } else bill.setDayDiscount("You don't have discount");
+        } else bill.setDayDiscount(0f);
     }
 
     //This option doesn't work properly.. Need to add discount codes to DB...//
     public void certificateDiscount(String code, Bill bill){
-        bill.setGiftCertificate("You don't have gift certificate");
+        bill.setGiftCertificate(0f);
     }
 
     private float exchanger(String name, float value){
