@@ -8,6 +8,7 @@ import com.santa.techtest.service.TourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class MainController {
         this.counterService = counterService;
     }
 
+//    @PreAuthorize("hasRole(ADMIN)")
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE,
                  consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -32,6 +34,7 @@ public class MainController {
         return tourService.filterPackages(filterDto);
     }
 
+    @PreAuthorize("hasAnyRole(ROLE_ADMIN,ROLE_USER)")
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = "/preOrder", produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
