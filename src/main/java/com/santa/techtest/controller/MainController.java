@@ -26,7 +26,6 @@ public class MainController {
         this.counterService = counterService;
     }
 
-//    @PreAuthorize("hasRole(ADMIN)")
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = "/filter", produces = MediaType.APPLICATION_JSON_VALUE,
                  consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -34,7 +33,6 @@ public class MainController {
         return tourService.filterPackages(filterDto);
     }
 
-    @PreAuthorize("hasAnyRole(ROLE_ADMIN,ROLE_USER)")
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = "/preOrder", produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -62,9 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/configuration/security",
                         "/swagger-ui.html",
                         "/webjars/**",
-                        "/auth/signin","/reg").permitAll()
+                        "/auth/signin","/reg","/packages/*","/packages/**").permitAll()
                 //TODO uncomment when there will be a logic for assigning user roles
-                .antMatchers("/packages/filter").hasAnyAuthority("ADMIN,USER")
+//                .antMatchers("/packages/filter").hasAnyAuthority("ADMIN,USER")
                 //.antMatchers(HttpMethod.DELETE, "**/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
