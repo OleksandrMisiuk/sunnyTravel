@@ -135,4 +135,18 @@ public class Bill {
                 ", total=" + total +
                 '}';
     }
+
+    public String toEmail(){
+        return  "Transfer=" + transfer + ",\n" +
+                "Insurance=" + insurance + ",\n" +
+                "Visa fee=" + visafee + ",\n" +
+                "Package price=" + packagePrice + ",\n" +
+                "Meal price=" + mealPrice + ",\n" +
+                "Room price=" + roomPrice + ",\n" +
+                "Gift certificate discount=" + giftCertificate + ",\n" +
+                "Sum discount=" + sumDiscount + ",\n" +
+                "Day discount=" + dayDiscount + ",\n" +
+                "Tour fee=" + tourFee + ",\n" +
+                "Total=" + total;
+    }
 }
