@@ -11,12 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -51,14 +48,14 @@ public class MainController {
     @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = "/order", produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void orderPackage(@RequestBody BookDto bookDto, HttpServletRequest request)
+    public void orderPackage(@RequestBody BookDto bookDto, Authentication authentication)
     {
         TourDto tourDto = tourService.getPackage(bookDto);
         Bill bill = counterService.getBill(bookDto);
-        logger.info("Main controller order method name: " + request.getUserPrincipal().getName());
+        logger.info("Main controller order method name: " + authentication.getName());
         emailService.sendSimpleMessage("SunnyTravel: Package ordered",
                 "////////////////Tour/////////////// \n" + tourDto.toEmail() +
                         "///////////////Bill/////////////// \n" + bill.toEmail() + '\n' +
-                "Pay for a package to this account: 5648 8789 7874 5458", request.getUserPrincipal().getName());
+                "Pay for a package to this account: 5648 8789 7874 5458", authentication.getName());
     }
 }
