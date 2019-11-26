@@ -69,6 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/auth/signin","/reg","/packages/preOrder","/packages/filter").permitAll()
                 //TODO uncomment when there will be a logic for assigning user roles
                 .antMatchers("/packages/order").authenticated()
+                .antMatchers("/admin/*", "/admin/**").hasAuthority("ADMIN")
 //                .antMatchers(HttpMethod.DELETE, "**/users/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
