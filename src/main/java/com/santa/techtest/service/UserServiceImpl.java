@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service("usrService")
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -41,6 +43,34 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<Role> getRoles(Long id) {
         return roleDao.getRolesByUserId(id);
+    }
+
+    @Override
+    public boolean setRoles(Long userId, List<Long> newRolesIds) {
+        List<Long> existingRolesIds = roleDao.findAll()
+                .stream().flatMap(r -> Stream.of(r.getId())).collect(Collectors.toList());
+
+        List<Long> currentRolesIds = roleDao.getRolesByUserId(userId)
+                .stream().flatMap(r -> Stream.of(r.getId())).collect(Collectors.toList());
+
+        // Adding new roles
+        for (Long roleId : newRolesIds) {
+            if (!currentRolesIds.contains(roleId) && existingRolesIds.contains(roleId)) {
+                roleDao.addRoleToUser(userId, roleId);
+            }
+        }
+        // Removing non-actual roles
+        for (Long roleId : currentRolesIds) {
+            if (!newRolesIds.contains(roleId)) {
+                roleDao.removeRoleFromUser(userId, roleId);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDao.findAll();
     }
 
     @Override

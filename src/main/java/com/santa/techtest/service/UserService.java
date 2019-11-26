@@ -11,4 +11,6 @@ public interface UserService {
     User findById(Long id);
     User findByEmail(String email);
     List<Role> getRoles(Long id);
+    boolean setRoles(Long userId, List<Long> newRolesIds);
+    List<User> findAll();
 }
