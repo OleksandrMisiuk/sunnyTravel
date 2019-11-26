@@ -32,11 +32,15 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendSimpleMessage(String subject, String text, String... emailTo) {
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(from());
-        mailMessage.setTo(emailTo);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(text);
-        mailSender.send(mailMessage);
+        try {
+            mailMessage.setFrom(from());
+            mailMessage.setTo(emailTo);
+            mailMessage.setSubject(subject);
+            mailMessage.setText(text);
+            mailSender.send(mailMessage);
+        } catch (RuntimeException e){
+            logger.error("Can't send email" + e.getMessage());
+        }
     }
 
     @Override

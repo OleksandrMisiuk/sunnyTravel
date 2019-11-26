@@ -204,4 +204,21 @@ public class TourDto {
                 ", visa=" + visa +
                 '}';
     }
+
+    public String toEmail(){
+        return "Country = " + country + ",\n" +
+                " City = " + city + ",\n" +
+                " Hotel = " + hotel + ",\n" +
+                " Date depart = " + dateDepart + ",\n" +
+                " Duration = " + duration + ",\n" +
+                " Description = " + description + ",\n" +
+                " Number of people = " + numberOfPeople + ",\n" +
+                " Sea distance = " + seaDistance + ",\n" +
+                " Room type = " + roomType + ",\n" +
+                " Meal = " + meal + ",\n" +
+                " Hotel rating = " + hotelRating + ",\n" +
+                " Transfer = " + transfer + ",\n" +
+                " Insurance = " + insurance + ",\n" +
+                " Visa = " + visa + "\n";
+    }
 }

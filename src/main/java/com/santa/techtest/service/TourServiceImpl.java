@@ -1,6 +1,7 @@
 package com.santa.techtest.service;
 
 import com.santa.techtest.dao.TourDao;
+import com.santa.techtest.dto.BookDto;
 import com.santa.techtest.dto.TourDto;
 import com.santa.techtest.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,10 @@ public class TourServiceImpl implements TourService {
         }
         queryOrder.append(";");
         return tourDao.filterPackages(queryOrder.toString());
+    }
+
+    @Override
+    public TourDto getPackage(BookDto bookDto) {
+        return tourDao.getPackage(bookDto);
     }
 }
