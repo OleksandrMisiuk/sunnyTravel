@@ -1,10 +1,13 @@
 package com.santa.techtest.service;
 
 import com.santa.techtest.dao.RoleDao;
+import com.santa.techtest.dao.TourDao;
 import com.santa.techtest.dao.UserDao;
 import com.santa.techtest.dao.UserDaoImpl;
 import com.santa.techtest.domain.Role;
 import com.santa.techtest.domain.User;
+import com.santa.techtest.dto.BookDto;
+import com.santa.techtest.dto.TourDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,10 +22,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserDao userDao;
     private RoleDao roleDao;
+    private TourDao tourDao;
     @Autowired
-    public UserServiceImpl(UserDaoImpl userDao, RoleDao roleDao){
+    public UserServiceImpl(UserDaoImpl userDao, RoleDao roleDao, TourDao tourDao){
         this.userDao = userDao;
         this.roleDao = roleDao;
+        this.tourDao = tourDao;
     }
 
     @Override
@@ -71,6 +76,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public List<User> findAll() {
         return userDao.findAll();
+    }
+
+    @Override
+    public boolean setTour(String username, BookDto bookDto) {
+        boolean f = tourDao.setTour(bookDto);
+        long id = tourDao.getTourId(bookDto);
+
+        return userDao.setPackage(username, id)&&f;
+    }
+
+    @Override
+    public TourDto getTour(String username) {
+        return tourDao.getPackageByUserId(username);
+    }
+
+    @Override
+    public boolean removeTour(String username) {
+        Long tourId = tourDao.getTourIdByUsername(username);
+        return userDao.removePackage(username)&&tourDao.removeTour(tourId);
     }
 
     @Override

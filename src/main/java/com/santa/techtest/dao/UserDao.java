@@ -10,5 +10,6 @@ public interface UserDao {
     User findById(Long id);
     User findByEmail(String email);
     List<User> findAll();
-
+    boolean setPackage(String username, Long tour_id);
+    boolean removePackage(String username);
 }

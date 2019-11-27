@@ -1,6 +1,7 @@
 package com.santa.techtest.dao;
 
 import com.santa.techtest.domain.User;
+import com.santa.techtest.mapper.TourMapper;
 import com.santa.techtest.mapper.UserDtoMapper;
 import com.santa.techtest.mapper.UserMapper;
 import com.santa.techtest.utils.EncryptionUtil;
@@ -23,13 +24,15 @@ public class UserDaoImpl implements UserDao {
     private UserMapper mapper;
     private UserDtoMapper dtoMapper;
     private Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
+    private TourMapper tourMapper;
 
     @Autowired
-    public UserDaoImpl(DataSource dataSource, UserMapper mapper, UserDtoMapper dtoMapper) {
+    public UserDaoImpl(DataSource dataSource, UserMapper mapper, UserDtoMapper dtoMapper, TourMapper tourMapper) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
         this.passwordEncoder = new EncryptionUtil();
         this.mapper = mapper;
         this.dtoMapper = dtoMapper;
+        this.tourMapper = tourMapper;
     }
 
     @Override
@@ -89,6 +92,24 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+    @Override
+    public boolean setPackage(String username, Long tour_id) {
+        try {
+            return jdbcTemplate.update(Queries.SQL_SET_PACKAGE, tour_id, username)>0;
+        }catch (Exception e){
+            throw new RuntimeException("Set package method error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public boolean removePackage(String username) {
+        try {
+            return jdbcTemplate.update(Queries.SQL_SET_PACKAGE, null, username)>0;
+        }catch (Exception e){
+            throw new RuntimeException("Set package method error: " + e.getMessage());
+        }
+    }
+
     static class Queries {
         static final String SQL_CREATE_USER =
                 "INSERT INTO public.\"User\"(username,password,is_active)" +
@@ -99,5 +120,6 @@ public class UserDaoImpl implements UserDao {
         static final String SQL_SELECT_USER_BY_EMAIL = "SELECT * FROM public.\"User\" WHERE username = ?;";
 
         static final String SQL_SELECT_ALL_USERS = "SELECT id, username, is_active FROM public.\"User\";";
+        static final String SQL_SET_PACKAGE = "UPDATE public.\"User\" SET tour_id = ? Where username = ?;";
     }
 }
